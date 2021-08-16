@@ -10,8 +10,8 @@ Required Features:
 - Minimum 2 players. <br/>
 - dice are hidden. <br/>
 - Valid claims are made. <br/>
-- Player can accuse previous player of lying. <br/>
+- Components.Player can accuse previous player of lying. <br/>
 - All dice are counted and player bid is evaluated correctly. <br/>
 - Round loser loses one die. <br/>
-- Player with no dice is removed from game. <br/>
+- Components.Player with no dice is removed from game. <br/>
 - Last player standing is the winner. <br/>
