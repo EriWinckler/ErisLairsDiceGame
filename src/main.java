@@ -20,6 +20,12 @@ public class main {
 
     public static void main(String[] args) {
 
+        System.out.println("Welcome to Eri's Liar Dice Game!");
+        System.out.println("How many players would like to play?");
+
+
+        int numPlayers = scan.nextInt(); //Getting number of players that are playing
+
     }
 
 
