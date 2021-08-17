@@ -1,6 +1,6 @@
 # ErisLairsDiceGame
 
-Game created as an assignment given by Gabriel Sherman, teacher of Cohort12 at CarrerDevs.
+Game created as an assignment given by Gabriel Sherman, teacher at CarrerDevs.
 
 Liar's Dice Instructions
 Create a console app to play liar's dice.
