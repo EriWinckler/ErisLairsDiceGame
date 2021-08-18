@@ -19,6 +19,4 @@ public class Cup {
         System.out.println("Your cup holds " + dices);
     }
 
-
-
 }

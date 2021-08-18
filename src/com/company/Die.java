@@ -11,5 +11,4 @@ public class Die {
         quantity = 5;
     }
 
-    public void roll(Random rand)
 }
