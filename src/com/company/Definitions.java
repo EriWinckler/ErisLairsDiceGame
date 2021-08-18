@@ -95,10 +95,16 @@ public class Definitions {
             System.out.println("What's the value of the dices you are betting?");
             valueDicesBet = scan.nextInt();
         } else if(numberDicesBet < currentDiceNumberBet) {
-            System.out.println("Previous player bet there's " + cu);
-            currentDiceNumberBet = numberDicesBet;
-            System.out.println("What's the value of the dices you are betting?");
-            valueDicesBet = scan.nextInt();
+            System.out.println("Previous player bet there's " + currentDiceNumberBet + " number " + valueDicesBet +
+                    ", call layer (type 0)");
+            numberDicesBet = scan.nextInt();
+            if(numberDicesBet == 0) {
+                liarCheck();
+            } else {
+                currentDiceNumberBet = numberDicesBet;
+                System.out.println("What's the value of the dices you are betting?");
+                valueDicesBet = scan.nextInt();
+            }
         } else {
             System.out.println("Invalid bet, try again");
             bet();
@@ -111,9 +117,15 @@ public class Definitions {
                     Collections.frequency(player1.diceValue, valueDicesBet) + Collections.frequency(player2.diceValue, valueDicesBet);
             if(countRepetition == valueDicesBet) {
                 System.out.println(player2.name + " is laying");
+                dice.removeDie(player2);
             } else {
-                System.out.println(player1.name + " is liar calling was wrong");
+                System.out.println(player1.name + " is wrong");
+                dice.removeDie(player1);
             }
+        }
+
+        public void winner() {
+            if()
         }
 
     }
