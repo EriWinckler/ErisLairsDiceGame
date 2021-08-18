@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Definitions {
@@ -15,6 +16,10 @@ public class Definitions {
     int numberDicesChallenge;
     int valueDicesChallenge;
 
+    //Initializing values used for bet
+    int currentDiceNumberBet = 0;
+    int tryBet;
+
     //Initialize round counter
     int round;
 
@@ -23,6 +28,9 @@ public class Definitions {
 
     //Checker for calling liar
     boolean isLiar = false;
+
+    //Operator for checking liar callinh
+    int comparationValue;
 
 
     //Initiating the game
@@ -56,25 +64,16 @@ public class Definitions {
             System.out.println("It's " + player1.name + " turn, " + player2.name + " please look away.");
             dice.rollDice(player1);
             //create method for the betting system
-            System.out.println("What's the number of dices you are betting?");
-            numberDicesBet = scan.nextInt();
-            System.out.println("What's the value of the dices you are betting?");
-            valueDicesBet = scan.nextInt();
+            bet();
 
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
+            System.out.println("/n/n/n");
 
             System.out.println("It's " + player2.name + " turn, are you ready? (y)");
             String rdy = scan.nextLine();
 
-
-            //create loop for y/n answer
-            String answer = scan.nextLine();
-
             dice.rollDice(player2);
-            System.out.println(player1.name + " bet " + numberDicesBet + " dices " + " " + valueDicesBet);
-            System.out.println("What's your bet? Or you wish to call " + player1.name + " a liar (type 0)?");
+            //System.out.println(player1.name + " bet " + numberDicesBet + " dices " + " " + valueDicesBet);
+            bet();
 
             //create conditional for calling liar
             System.out.println("What's the number of dices you are betting?");
@@ -87,19 +86,34 @@ public class Definitions {
 
     //Betting method
     public void bet() {
-        System.out.println("What's the number of dices you are betting?");
-        numberDicesBet = scan.nextInt();
-        System.out.println("What's the value of the dices you are betting?");
-        valueDicesBet = scan.nextInt();
 
 
-        if (numberDicesChallenge < numberDicesBet) {
-            System.out.println("Invalid bet, please select a valid number of dices");
-            //return questions
+        if(currentDiceNumberBet == 0) {
+            System.out.println("What's the number of dices you are betting?");
+            numberDicesBet = scan.nextInt();
+            numberDicesBet = currentDiceNumberBet;
+            System.out.println("What's the value of the dices you are betting?");
+            valueDicesBet = scan.nextInt();
+        } else if(numberDicesBet < currentDiceNumberBet) {
+            System.out.println("Previous player bet there's " + cu);
+            currentDiceNumberBet = numberDicesBet;
+            System.out.println("What's the value of the dices you are betting?");
+            valueDicesBet = scan.nextInt();
+        } else {
+            System.out.println("Invalid bet, try again");
+            bet();
         }
+    }
 
+    public void liarCheck() {
         if(isLiar == true) {
-
+            int countRepetition =
+                    Collections.frequency(player1.diceValue, valueDicesBet) + Collections.frequency(player2.diceValue, valueDicesBet);
+            if(countRepetition == valueDicesBet) {
+                System.out.println(player2.name + " is laying");
+            } else {
+                System.out.println(player1.name + " is liar calling was wrong");
+            }
         }
 
     }
