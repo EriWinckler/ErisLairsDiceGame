@@ -7,9 +7,8 @@ public class Definitions {
 
     Scanner scan = new Scanner(System.in);
 
+    Player player = new Player();
     Dice dice = new Dice();
-    Player player1 = new Player();
-    Player player2 = new Player();
 
     int numberDicesBet;
     int valueDicesBet;
@@ -29,7 +28,7 @@ public class Definitions {
     //Checker for calling liar
     boolean isLiar = false;
 
-    //Operator for checking liar callinh
+    //Operator for checking liar calling
     int comparationValue;
 
 
@@ -37,16 +36,23 @@ public class Definitions {
     public void startGame() {
         System.out.println("Welcome to Eri's liars dice game!");
         System.out.println("");
+        System.out.println("How many players are playing?");
+        int numPlayers = scan.nextInt();
+        System.out.println("How many dices?");
+        int die = scan.nextInt();
+        for(int i = 0; i <= numPlayers; i++) {
+
+        }
+
         System.out.println("Whats the First player name?");
-        player1.name = scan.nextLine();
+        player.name = scan.nextLine();
 
-        System.out.println("");
-        System.out.println("Whats the Second player name?");
-        player2.name = scan.nextLine();
 
-        System.out.println("Let the game begin!");
 
-        round();
+        while(isActive) {
+            round();
+        }
+
     }
 
     //Game round method
@@ -63,7 +69,7 @@ public class Definitions {
 
             System.out.println("It's " + player1.name + " turn, " + player2.name + " please look away.");
             dice.rollDice(player1);
-            //create method for the betting system
+            //Betting system
             bet();
 
             System.out.println("/n/n/n");
@@ -86,8 +92,6 @@ public class Definitions {
 
     //Betting method
     public void bet() {
-
-
         if(currentDiceNumberBet == 0) {
             System.out.println("What's the number of dices you are betting?");
             numberDicesBet = scan.nextInt();
@@ -124,9 +128,7 @@ public class Definitions {
             }
         }
 
-        public void winner() {
-            if()
-        }
+
 
     }
 
