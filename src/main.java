@@ -7,9 +7,9 @@ import com.company.Player;
 public class main {
     public static void main(String[] args) {
 
-        Definitions Game = new Definitions();
+        Definitions game = new Definitions();
 
-        Game.Definitions();
+        game.start();
 
     }
 }

@@ -7,14 +7,6 @@ public class Player {
     public int remainingDices;
     public ArrayList<Integer> diceValue = new ArrayList<>();
     public boolean active = true;
+
     public String name = "";
-
-
-    Dice dice = new Dice();
-
-    public Player(String name, int dices) {
-        this.name = name;
-        this.remainingDices = dices;
-    }
-
 }
