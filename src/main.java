@@ -9,7 +9,7 @@ public class main {
 
         Definitions Game = new Definitions();
 
-        Game.startGame();
+        Game.Definitions();
 
     }
 }

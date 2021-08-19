@@ -7,10 +7,12 @@ public class Dice {
 
     Random random = new Random();
 
+
     public void rollDice(Player player) {
+
         player.diceValue.clear();
         for (int i = 0; i < player.remainingDices; ++i) {
-            player.diceValue.add(random.nextInt(player.remainingDices) + 1 );
+            player.diceValue.add(random.nextInt(6) + 1 );
         }
 
         //Sort the ArrayList
@@ -28,4 +30,5 @@ public class Dice {
             System.out.println(player.name + " is out!!");
         }
     }
+
 }

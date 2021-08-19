@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -7,47 +8,48 @@ public class Definitions {
 
     Scanner scan = new Scanner(System.in);
 
-    Player player = new Player();
     Dice dice = new Dice();
+    TableDice tableDice = new TableDice();
 
-    int numberDicesBet;
-    int valueDicesBet;
-    int numberDicesChallenge;
-    int valueDicesChallenge;
+
+    public Player currentPlayer;
+
+    //Initializing players array
+    public ArrayList<Player> players = new ArrayList<>();
+
 
     //Initializing values used for bet
-    int currentDiceNumberBet = 0;
-    int tryBet;
+    private int currentDiceNumberBet = 0;
+    private int numberDicesBet;
+    private int valueDicesBet;
 
     //Initialize round counter
-    int round;
+    private int round;
 
     //Checker if game is still on
-    boolean isActive = true;
+    private boolean isActive = true;
 
     //Checker for calling liar
-    boolean isLiar = false;
+    private boolean isLiar = false;
 
     //Operator for checking liar calling
-    int comparationValue;
+    private int comparationValue;
 
 
     //Initiating the game
-    public void startGame() {
+    public Definitions() {
         System.out.println("Welcome to Eri's liars dice game!");
         System.out.println("");
         System.out.println("How many players are playing?");
         int numPlayers = scan.nextInt();
         System.out.println("How many dices?");
         int die = scan.nextInt();
-        for(int i = 0; i <= numPlayers; i++) {
 
-        }
-
-        System.out.println("Whats the First player name?");
-        player.name = scan.nextLine();
-
-
+        while (numPlayers > players.size()) {
+            String name = newPlayer();
+            players.add(new Player(name, die));
+            System.out.println(players.size());
+        };
 
         while(isActive) {
             round();
@@ -55,38 +57,34 @@ public class Definitions {
 
     }
 
+    private String newPlayer() {
+        System.out.println("Whats the player name?");
+        String ts = scan.nextLine();
+        String name = scan.nextLine();
+        return name;
+    }
+
     //Game round method
     public void round() {
-        if(player1.remainingDices == 0) {
-            System.out.println("Game Over! " + player2.name + " Wins! Number of rounds: " + round);
-            isActive = false;
-        } else if (player2.remainingDices == 0) {
-            System.out.println("Game Over! " + player1.name + " Wins! Number of rounds: " + round);
-            isActive = false;
-        } else {
-            //Round counter
-            round += 1;
+        for(Player player : players) {
+            currentPlayer = player;
+            if(player.remainingDices == 0) {
+                System.out.println("Game Over! " + player.name + " Wins! Number of rounds: " + round);
+                isActive = false;
+            } else if (player.remainingDices == 0) {
+                System.out.println("Game Over! " + player.name + " Wins! Number of rounds: " + round);
+                isActive = false;
+            } else {
+                //Round counter
+                round += 1;
 
-            System.out.println("It's " + player1.name + " turn, " + player2.name + " please look away.");
-            dice.rollDice(player1);
-            //Betting system
-            bet();
-
-            System.out.println("/n/n/n");
-
-            System.out.println("It's " + player2.name + " turn, are you ready? (y)");
-            String rdy = scan.nextLine();
-
-            dice.rollDice(player2);
-            //System.out.println(player1.name + " bet " + numberDicesBet + " dices " + " " + valueDicesBet);
-            bet();
-
-            //create conditional for calling liar
-            System.out.println("What's the number of dices you are betting?");
-            numberDicesChallenge = scan.nextInt();
-            System.out.println("What's the value of the dices you are betting?");
-            valueDicesChallenge = scan.nextInt();
-
+                System.out.println("It's " + player.name + " turn, " + "next player please look away.");
+                dice.rollDice(player);
+                tableDice.tableDices.add(player.diceValue);
+                //Betting system
+                bet();
+                System.out.println("\n\n\n");
+            }
         }
     }
 
@@ -99,11 +97,11 @@ public class Definitions {
             System.out.println("What's the value of the dices you are betting?");
             valueDicesBet = scan.nextInt();
         } else if(numberDicesBet < currentDiceNumberBet) {
-            System.out.println("Previous player bet there's " + currentDiceNumberBet + " number " + valueDicesBet +
+            System.out.println("Previous player bet there's " + currentDiceNumberBet + " numbers " + valueDicesBet +
                     ", call layer (type 0)");
             numberDicesBet = scan.nextInt();
             if(numberDicesBet == 0) {
-                liarCheck();
+                //liarCheck();
             } else {
                 currentDiceNumberBet = numberDicesBet;
                 System.out.println("What's the value of the dices you are betting?");
@@ -118,20 +116,17 @@ public class Definitions {
     public void liarCheck() {
         if(isLiar == true) {
             int countRepetition =
-                    Collections.frequency(player1.diceValue, valueDicesBet) + Collections.frequency(player2.diceValue, valueDicesBet);
+                    Collections.frequency(player.diceValue, valueDicesBet);
             if(countRepetition == valueDicesBet) {
-                System.out.println(player2.name + " is laying");
-                dice.removeDie(player2);
+                System.out.println(currentPlayer + " is laying");
+                dice.removeDie(currentPlayer);
             } else {
                 System.out.println(player1.name + " is wrong");
-                dice.removeDie(player1);
+                dice.removeDie(currentPlayer);
             }
         }
 
 
 
     }
-
-
-
 }

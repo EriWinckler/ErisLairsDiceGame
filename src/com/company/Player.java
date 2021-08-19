@@ -9,11 +9,12 @@ public class Player {
     public boolean active = true;
     public String name = "";
 
+
     Dice dice = new Dice();
 
-    public Player(String name, int numberOfDice) {
+    public Player(String name, int dices) {
         this.name = name;
-        this.remainingDices = numberOfDice;
+        this.remainingDices = dices;
     }
 
 }
