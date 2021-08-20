@@ -8,7 +8,7 @@ public class Dice {
     Random random = new Random();
 
     public void rollDice(Player players) {
-        System.out.println(players.diceValue);
+
         players.diceValue.clear();
         for (int i = 0; i < players.remainingDices; i++) {
             players.diceValue.add(random.nextInt(6) + 1 );
@@ -16,9 +16,6 @@ public class Dice {
 
         //Sort the ArrayList
         Collections.sort(players.diceValue);
-
-        System.out.print(players.name + " rolled " + players.diceValue);
-        System.out.println("");
     }
 
     public void removeDie(Player player) {
@@ -26,7 +23,6 @@ public class Dice {
             player.remainingDices = player.remainingDices - 1;
         } else {
             player.active = false;
-            System.out.println(player.name + " is out!!");
         }
     }
 
