@@ -4,7 +4,7 @@ import com.company.Dice;
 import com.company.Player;
 
 
-public class main {
+public class Main {
     public static void main(String[] args) {
 
         Definitions game = new Definitions();

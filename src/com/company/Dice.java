@@ -7,18 +7,17 @@ public class Dice {
 
     Random random = new Random();
 
-
-    public void rollDice(Player player) {
-
-        player.diceValue.clear();
-        for (int i = 0; i < player.remainingDices; ++i) {
-            player.diceValue.add(random.nextInt(6) + 1 );
+    public void rollDice(Player players) {
+        System.out.println(players.diceValue);
+        players.diceValue.clear();
+        for (int i = 0; i < players.remainingDices; i++) {
+            players.diceValue.add(random.nextInt(6) + 1 );
         }
 
         //Sort the ArrayList
-        Collections.sort(player.diceValue);
+        Collections.sort(players.diceValue);
 
-        System.out.print(player.name + " rolled " + player.diceValue);
+        System.out.print(players.name + " rolled " + players.diceValue);
         System.out.println("");
     }
 
