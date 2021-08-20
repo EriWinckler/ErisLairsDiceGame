@@ -17,6 +17,7 @@ public class Definitions {
     int numPlayers;
     int playerCount;
     boolean secondTurn = false;
+    int currentDiceValueBet;
 
     public Player currentPlayer;
 
@@ -81,73 +82,52 @@ public class Definitions {
     //Game round method
     public void round() {
         //Round counter
-        do {
+
             round += 1;
 
-        for(int i = 0; i < players.size(); i++) {
-            currentPlayer = players.get(i);
+            for(int i = 0; i < players.size(); i++) {
+                currentPlayer = players.get(i);
 
-            if (currentPlayer.remainingDices == 0) {
-                System.out.println("Game Over for " + currentPlayer.name + "Number of rounds: " + round);
-                currentPlayer.active = false;
-            } else {
-            System.out.println("It's " + currentPlayer.name + " turn, " + "other players please look away.");
-            System.out.println(currentPlayer.diceValue + " is your roll");
-            if(secondTurn == true) {
-                dice.rollDice(currentPlayer);
-                tableDice.addAll(currentPlayer.diceValue);
-            }
-            checkGameState();
-            if(!isActive) {
-                return;
-            }
+                if (currentPlayer.remainingDices == 0) {
+                    System.out.println("Game Over for " + currentPlayer.name + "Number of rounds: " + round);
+                    currentPlayer.active = false;
+                } else {
+                System.out.println("It's " + currentPlayer.name + " turn, " + "other players please look away.");
+                Player.handCheck(currentPlayer);
 
-            //Betting method
-            bet();
-            System.out.println("\n\n\n");
-            }
-        }
-
-            /*
-            if (currentPlayer.remainingDices == 0) {
-                System.out.println("Game Over for " + currentPlayer.name +
-                        " " +
-                        "Number of rounds: " + round);
-                currentPlayer.active = false;
-            } else {
-                System.out.println("It's " + currentPlayer.name + " turn, " +
-                        "other players please look away.");
-                System.out.println(currentPlayer.diceValue + " is your roll");
-                if(secondTurn == false) {
+                if(secondTurn == true) {
                     dice.rollDice(currentPlayer);
                     tableDice.addAll(currentPlayer.diceValue);
-                } else {
-                    System.out.println(currentPlayer.diceValue + " is your roll");
-                    bet();
                 }
                 checkGameState();
-                //Betting system
+                if(!isActive) {
+                    break;
+                }
+
+                //Betting method
                 bet();
                 System.out.println("\n\n\n");
+                }
+            }
 
-            }*/
-        } while(!isActive);
     }
 
     //Betting method
     public void bet() {
-        do {
+        boolean validBet = numberDicesBet <= currentDiceNumberBet || valueDicesBet != currentDiceValueBet;
+
             if (currentDiceNumberBet == 0) {
                 System.out.println("What's the number of dices you are betting?");
                 numberDicesBet = scan.nextInt();
                 currentDiceNumberBet = numberDicesBet;
                 System.out.println("What's the value of the dices you are betting?");
                 valueDicesBet = scan.nextInt();
-            } else if (numberDicesBet < currentDiceNumberBet) {
-                System.out.println("Previous player bet there's " + currentDiceNumberBet + " numbers " + valueDicesBet +
+                currentDiceValueBet = valueDicesBet;
+            } else if (validBet) {
+                System.out.println("Previous player bet there's " + currentDiceNumberBet + " numbers " + currentDiceValueBet +
                         ", call layer (type 0), continue type 1");
-                secondTurn = true;
                 int secondBet = scan.nextInt();
+                secondTurn = true;
                 switch (secondBet) {
                     case 0:
                         liarCheck();
@@ -159,9 +139,9 @@ public class Definitions {
                         valueDicesBet = scan.nextInt();
                 }
             } else {
-                bet();
+               return;
             }
-        } while (!isActive);
+
     }
 
     public void liarCheck() {
@@ -189,8 +169,7 @@ public class Definitions {
 
     public void checkGameState() {
         if (playerCount == 1) {
-            System.out.println("Game Over " + currentPlayer.name + " Wins" +
-                    "!");
+            System.out.println("Game Over " + currentPlayer.name + " Wins!");
             isActive = false;
         }
     }

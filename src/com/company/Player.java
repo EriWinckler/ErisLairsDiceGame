@@ -9,4 +9,7 @@ public class Player {
     public boolean active = true;
     public String name = "";
 
+    public static void handCheck(Player player) {
+        System.out.println(player.diceValue + " is your roll");
+    }
 }
