@@ -82,7 +82,7 @@ public class Definitions {
     //Game round method
     public void round() {
         //Round counter
-
+        checkGameState();
             round += 1;
 
             for(int i = 0; i < players.size(); i++) {
@@ -144,6 +144,16 @@ public class Definitions {
 
     }
 
+    public void continueBet() {
+        if(currentDiceValueBet != 6) {
+            System.out.println(currentPlayer.name + " choose your second bet.");
+            System.out.println("Select Option 1 or 2:");
+            System.out.println("1 - Increase the value of the die you bet");
+            System.out.println(" " +
+                    " 8");
+        }
+    }
+
     public void liarCheck() {
             int countRepetition = Collections.frequency(tableDice.tableDice, valueDicesBet);
             if(countRepetition == valueDicesBet) {
@@ -167,10 +177,15 @@ public class Definitions {
             }
     }
 
-    public void checkGameState() {
+    public String checkGameState() {
         if (playerCount == 1) {
             System.out.println("Game Over " + currentPlayer.name + " Wins!");
             isActive = false;
+        }
+        if(isActive) {
+            return "Round is over!";
+        } else {
+            return "Game Over.";
         }
     }
 
