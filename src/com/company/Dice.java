@@ -9,20 +9,21 @@ public class Dice {
 
     public void rollDice(Player players) {
 
-        players.diceValue.clear();
-        for (int i = 0; i < players.remainingDices; i++) {
-            players.diceValue.add(random.nextInt(6) + 1 );
+        players.getDiceValue().clear();
+        for (int i = 0; i < players.getRemainingDices(); i++) {
+            players.getDiceValue().add(random.nextInt(6) + 1 );
         }
 
         //Sort the ArrayList
-        Collections.sort(players.diceValue);
+        Collections.sort(players.getDiceValue());
     }
 
     public void removeDie(Player player) {
-        if (player.remainingDices > 0) {
-            player.remainingDices = player.remainingDices - 1;
+        if (player.getRemainingDices() > 0) {
+            player.setRemainingDices(player.getRemainingDices() - 1);
+            player.getDiceValue().remove(player.getDiceValue().size() - 1);
         } else {
-            player.active = false;
+            player.setActive(false);
         }
     }
 
