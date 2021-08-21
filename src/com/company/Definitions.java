@@ -58,7 +58,7 @@ public class Definitions {
 
             while (numPlayers > players.size()) {
                 players.add(createNewPlayer(die));
-            };
+            }
 
             while (isActive) {
                 round();
@@ -94,7 +94,7 @@ public class Definitions {
                             " " + "other players please look away.");
                     Player.handCheck(currentPlayer);
 
-                    if (secondTurn == true) {
+                    if (secondTurn) {
                         dice.rollDice(currentPlayer);
                         table.addAll(currentPlayer.getDiceValue());
                         continueBet();
@@ -103,7 +103,6 @@ public class Definitions {
                     //Betting method
                     bet();
                     System.out.println("\n\n\n");
-
                 }
             }
         }
@@ -127,7 +126,6 @@ public class Definitions {
     }
 
     public void continueBet() {
-
         System.out.println("Previous player bet there's " + currentDiceNumberBet + " dices " + currentDiceValueBet);
         System.out.println("Do you choose to:");
         System.out.println("1 - Call him a liar");
@@ -182,7 +180,6 @@ public class Definitions {
                         break;
                 }
         }
-
     }
 
     public void liarCheck() {
@@ -226,7 +223,7 @@ public class Definitions {
     public void playerChecker() {
         for (int i = 0; i < players.size(); i++) {
             playerChecker = players.get(i);
-            if(playerChecker.getPlayerActive() == true) {
+            if(playerChecker.getPlayerActive()) {
                 playerChecker.getRemainingPlayerName().add(playerChecker.getName());
             }
         }
@@ -238,7 +235,6 @@ public class Definitions {
             System.out.println("Game Over " + currentPlayer.getRemainingPlayerName() + " Wins in " + round + " rounds");
             isActive = false;
             gameOn = false;
-            return;
         }
     }
 
