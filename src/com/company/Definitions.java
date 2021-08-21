@@ -11,14 +11,19 @@ public class Definitions {
     Dice dice = new Dice();
     TableDice table = new TableDice();
 
+    private Player currentPlayer;
+    private Player previousPlayer;
+    private Player playerChecker;
+    private Player roller;
 
-    //test variable
-    int numPlayers;
-    int playerCount;
-    boolean secondTurn = false;
-    int currentDiceValueBet;
+    private int numPlayers;
+    private int playerCount;
 
-    public Player currentPlayer;
+    //loop conditionals
+    private boolean firstTurn = true;
+    private boolean secondTurn = false;
+    private boolean gameOn = true;
+    private boolean isActive = true;
 
     //Initializing players array
     public ArrayList<Player> players = new ArrayList<>();
@@ -27,36 +32,29 @@ public class Definitions {
     private int currentDiceNumberBet = 0;
     private int numberDicesBet;
     private int valueDicesBet;
+    private String decision;
+    private int currentDiceValueBet;
 
     //Initialize round counter
     private int round;
 
-    //Checker if game is still on
-    private boolean isActive = true;
-
-    //Checker for calling liar
-    private boolean isLiar = false;
-    private boolean callingLiar = false;
-
-    //Operator for checking liar calling
-    private int comparationValue;
-
 
     //Initiating the game
     public void start() {
-        System.out.println("Welcome to Eri's liars dice game!");
-        System.out.println("");
-        System.out.println("How many players are playing?");
-        numPlayers = Integer.parseInt(scan.nextLine());
+        while(gameOn) {
+            System.out.println("Welcome to Eri's liars dice game!");
+            System.out.println("");
+            System.out.println("How many players are playing?");
+            numPlayers = Integer.parseInt(scan.nextLine());
 
-        if(numPlayers < 2) {
-            System.out.println("Invalid number of players, please select " +
-                    "between 2-10.");
-            start();
-        }
+            if (numPlayers < 2) {
+                System.out.println("Invalid number of players, please select " +
+                        "between 2-10.");
+                start();
+            }
 
-        System.out.println("How many dices?");
-        int die = Integer.parseInt(scan.nextLine());
+            System.out.println("How many dices?");
+            int die = Integer.parseInt(scan.nextLine());
 
             while (numPlayers > players.size()) {
                 players.add(createNewPlayer(die));
@@ -65,6 +63,7 @@ public class Definitions {
             while (isActive) {
                 round();
             }
+        }
     }
 
     private Player createNewPlayer(int die) {
@@ -73,6 +72,7 @@ public class Definitions {
         String name = scan.nextLine();
         newPlayer.setName(name);
         newPlayer.setRemainingDices(die);
+        newPlayer.setTotalDices(die);
         dice.rollDice(newPlayer);
         playerCount++;
         return newPlayer;
@@ -81,117 +81,171 @@ public class Definitions {
     //Game round method
     public void round() {
         //Round counter
+        round += 1;
         checkGameState();
-            round += 1;
+        while(gameOn) {
 
-            for(int i = 0; i < players.size(); i++) {
+            for (int i = 0; i < players.size(); i++) {
                 currentPlayer = players.get(i);
-
                 if (currentPlayer.getRemainingDices() == 0) {
-                    System.out.println("Game Over for " + currentPlayer.getName() + "Number of rounds: " + round);
-                    currentPlayer.setActive(false);
+                    checkGameState();
                 } else {
-                System.out.println("It's " + currentPlayer.getName() + " turn," +
-                        " " + "other players please look away.");
-                Player.handCheck(currentPlayer);
+                    System.out.println("It's " + currentPlayer.getName() + " turn," +
+                            " " + "other players please look away.");
+                    Player.handCheck(currentPlayer);
 
-                if(secondTurn == true) {
-                    dice.rollDice(currentPlayer);
-                    table.addAll(currentPlayer.getDiceValue());
-                }
-                checkGameState();
-                if(!isActive) {
-                    break;
-                }
+                    if (secondTurn == true) {
+                        dice.rollDice(currentPlayer);
+                        table.addAll(currentPlayer.getDiceValue());
+                        continueBet();
+                    }
 
-                //Betting method
-                bet();
-                System.out.println("\n\n\n");
+                    //Betting method
+                    bet();
+                    System.out.println("\n\n\n");
+
                 }
             }
-
+        }
     }
 
     //Betting method
     public void bet() {
-        boolean validBet = numberDicesBet <= currentDiceNumberBet || valueDicesBet != currentDiceValueBet;
+        while(firstTurn) {
+            System.out.println("What's the number of dices you are betting?");
+            numberDicesBet = scan.nextInt();
+            currentDiceNumberBet = numberDicesBet;
 
-            if (currentDiceNumberBet == 0) {
-                System.out.println("What's the number of dices you are betting?");
-                numberDicesBet = scan.nextInt();
-                currentDiceNumberBet = numberDicesBet;
-                System.out.println("What's the value of the dices you are betting?");
-                valueDicesBet = scan.nextInt();
-                currentDiceValueBet = valueDicesBet;
-            } else if (validBet) {
-                System.out.println("Previous player bet there's " + currentDiceNumberBet + " numbers " + currentDiceValueBet +
-                        ", call layer (type 0), continue type 1");
-                int secondBet = scan.nextInt();
-                secondTurn = true;
-                switch (secondBet) {
-                    case 0:
-                        liarCheck();
-                        break;
-                    default:
-                        System.out.println(currentPlayer.getName() + " What's " +
-                                "the number of dices you are betting?");
-                        numberDicesBet = scan.nextInt();
-                        currentDiceNumberBet = numberDicesBet;
-                        System.out.println(currentPlayer.getName() + " What's " +
-                                "the value of the dices you are betting?");
-                        valueDicesBet = scan.nextInt();
-                        break;
-                }
-            } else {
-               return;
-            }
+            System.out.println("What's the value of the dices you are betting?");
+            valueDicesBet = scan.nextInt();
+            currentDiceValueBet = valueDicesBet;
+            previousPlayer = currentPlayer;
+            firstTurn = false;
+            secondTurn = true;
 
+        }
     }
 
     public void continueBet() {
-        if(currentDiceValueBet != 6) {
-            System.out.println(currentPlayer.getName() + " choose your second " +
-                    "bet.");
-            System.out.println("Select Option 1 or 2:");
-            System.out.println("1 - Increase the value of the die you bet");
-            System.out.println(" " +
-                    " 8");
+
+        System.out.println("Previous player bet there's " + currentDiceNumberBet + " dices " + currentDiceValueBet);
+        System.out.println("Do you choose to:");
+        System.out.println("1 - Call him a liar");
+        System.out.println("2 - Make a new bet");
+        scan.nextLine();
+        decision = scan.nextLine();
+        switch(decision) {
+            case "1":
+                liarCheck();
+                break;
+
+            case "2":
+                if (currentDiceValueBet != currentPlayer.getTotalDices()) {
+                    System.out.println(currentPlayer.getName() + " You can only select option 1 or 2:");
+                    System.out.println("1 - Increase the amount of dice keeping the same value.");
+                    System.out.println("2 - Change the value of dice and the quantity.");
+                    decision = "0";
+                    decision = scan.nextLine();
+                    previousPlayer = currentPlayer;
+                } else {
+                    System.out.println(currentPlayer.getName() + " as the dice value is at maximum, you can only increase the quantity");
+                    decision = "2";
+                    previousPlayer = currentPlayer;
+                }
+
+                switch (decision) {
+                    case "1":
+                        System.out.println("The last bet was " + currentDiceNumberBet + " dices " + currentDiceValueBet);
+                        do {
+                            System.out.println("Whats the new number of dices for the new bet?");
+                            numberDicesBet = scan.nextInt();
+                            break;
+                        } while (numberDicesBet <= currentDiceNumberBet);
+                        currentDiceNumberBet = numberDicesBet;
+                        break;
+
+                    case "2":
+                        do {
+                            System.out.println("The current number of dices bet is " + currentDiceNumberBet + " how much would you like to increase?");
+                            numberDicesBet = scan.nextInt();
+                            numberDicesBet = currentDiceNumberBet;
+                            break;
+                        } while (numberDicesBet <= currentDiceNumberBet);
+
+                        System.out.println("What's the number of the die value would you like to bet? It can be any value.");
+                        valueDicesBet = scan.nextInt();
+                        valueDicesBet = currentDiceValueBet;
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice");
+                        break;
+                }
         }
+
     }
 
     public void liarCheck() {
-            int countRepetition = Collections.frequency(table.tableDice, valueDicesBet);
-            if(countRepetition == valueDicesBet) {
-                System.out.println("previous player is laying");
-                dice.removeDie(currentPlayer);
-                secondTurn = false;
-                table.tableDice.clear();
-                currentDiceNumberBet = 0;
-                round();
-                //check playerCount
-            } else {
-                System.out.println(currentPlayer.getName() + " is wrong");
-                dice.removeDie(currentPlayer);
-                secondTurn = false;
-                table.tableDice.clear();
-                currentDiceNumberBet = 0;
-                if(currentPlayer.getActive() == false){
-                    playerCount--;
-                }
-                round();
+        int countRepetition = Collections.frequency(table.tableDice, valueDicesBet);
+        if (countRepetition == currentDiceValueBet) {
+            System.out.println(previousPlayer + " player is laying");
+            dice.removeDie(previousPlayer);
+
+            if (currentPlayer.getDiceValue().size() == 0) {
+                playerCount--;
             }
-    }
 
-    public String checkGameState() {
-        if (playerCount == 1) {
-            System.out.println("Game Over " + currentPlayer.getName() + " Wins!");
-            isActive = false;
-        }
-        if(isActive) {
-            return "Round is over!";
+            //clearing variables
+            table.tableDice.clear();
+            currentDiceNumberBet = 0;
+            currentDiceValueBet = 0;
+            firstTurn = true;
+            secondTurn = false;
+            rattleTheBucket();
+
+            round();
         } else {
-            return "Game Over.";
+            System.out.println(currentPlayer.getName() + " is mistaken in calling the liar");
+            dice.removeDie(currentPlayer);
+
+            if (currentPlayer.getDiceValue().size() == 0) {
+                playerCount--;
+            }
+            //clearing variables
+            table.tableDice.clear();
+            currentDiceNumberBet = 0;
+            currentDiceValueBet = 0;
+            firstTurn = true;
+            secondTurn = false;
+            rattleTheBucket();
+
+            round();
         }
     }
 
+    public void playerChecker() {
+        for (int i = 0; i < players.size(); i++) {
+            playerChecker = players.get(i);
+            if(playerChecker.getPlayerActive() == true) {
+                playerChecker.getRemainingPlayerName().add(playerChecker.getName());
+            }
+        }
+    }
+
+    public void checkGameState() {
+        if (playerCount == 1) {
+            playerChecker();
+            System.out.println("Game Over " + currentPlayer.getRemainingPlayerName() + " Wins in " + round + " rounds");
+            isActive = false;
+            gameOn = false;
+            return;
+        }
+    }
+
+    public void rattleTheBucket() {
+        for (int i = 0; i < players.size(); i++) {
+            roller = players.get(i);
+            dice.rollDice(roller);
+        }
+    }
 }

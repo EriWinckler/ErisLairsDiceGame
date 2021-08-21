@@ -23,7 +23,7 @@ public class Dice {
             player.setRemainingDices(player.getRemainingDices() - 1);
             player.getDiceValue().remove(player.getDiceValue().size() - 1);
         } else {
-            player.setActive(false);
+            player.setPlayerActive(false);
         }
     }
 
