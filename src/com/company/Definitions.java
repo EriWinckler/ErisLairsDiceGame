@@ -51,13 +51,12 @@ public class Definitions {
                 System.out.println("Invalid number of players, please select " +
                         "between 2-10.");
                 start();
-            }
-
-            System.out.println("How many dices?");
-            int die = Integer.parseInt(scan.nextLine());
-
-            while (numPlayers > players.size()) {
-                players.add(createNewPlayer(die));
+            } else {
+                System.out.println("How many dices?");
+                int die = Integer.parseInt(scan.nextLine());
+                while (numPlayers > players.size()) {
+                    players.add(createNewPlayer(die));
+                }
             }
 
             while (isActive) {
@@ -110,19 +109,18 @@ public class Definitions {
 
     //Betting method
     public void bet() {
-        while(firstTurn) {
-            System.out.println("What's the number of dices you are betting?");
-            numberDicesBet = scan.nextInt();
-            currentDiceNumberBet = numberDicesBet;
+            while(firstTurn && gameOn) {
+                System.out.println("What's the number of dices you are betting?");
+                numberDicesBet = scan.nextInt();
+                currentDiceNumberBet = numberDicesBet;
 
-            System.out.println("What's the value of the dices you are betting?");
-            valueDicesBet = scan.nextInt();
-            currentDiceValueBet = valueDicesBet;
-            previousPlayer = currentPlayer;
-            firstTurn = false;
-            secondTurn = true;
-
-        }
+                System.out.println("What's the value of the dices you are betting?");
+                valueDicesBet = scan.nextInt();
+                currentDiceValueBet = valueDicesBet;
+                previousPlayer = currentPlayer;
+                firstTurn = false;
+                secondTurn = true;
+            }
     }
 
     public void continueBet() {
@@ -166,13 +164,13 @@ public class Definitions {
                         do {
                             System.out.println("The current number of dices bet is " + currentDiceNumberBet + " how much would you like to increase?");
                             numberDicesBet = scan.nextInt();
-                            numberDicesBet = currentDiceNumberBet;
+                            currentDiceValueBet = numberDicesBet;
                             break;
                         } while (numberDicesBet <= currentDiceNumberBet);
 
                         System.out.println("What's the number of the die value would you like to bet? It can be any value.");
                         valueDicesBet = scan.nextInt();
-                        valueDicesBet = currentDiceValueBet;
+                        currentDiceValueBet = valueDicesBet;
                         break;
 
                     default:
@@ -232,7 +230,8 @@ public class Definitions {
     public void checkGameState() {
         if (playerCount == 1) {
             playerChecker();
-            System.out.println("Game Over " + currentPlayer.getRemainingPlayerName() + " Wins in " + round + " rounds");
+            System.out.println("Game Over " + playerChecker.getRemainingPlayerName() +
+                    " Wins in " + round + " rounds");
             isActive = false;
             gameOn = false;
         }
